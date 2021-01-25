@@ -6,7 +6,16 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-
+        <div id="listfiltering_controls">
+            <input id="companyid_input" type="text" placeholder="Company ID">
+            <input id="startdate_input" type="date" placeholder="Start of date range">
+            <input id="enddate_input" type="date" placeholder="End of date range">
+            <input id="refreshlist_button" type="button" value="Refresh and filter list" title="Refreshes the list and filters list">
+        </div>
+        <div id="ticketactions_controls">
+            <input id="closeticketspage_button" type="button" value="Close all tickets in current page" title="Close all tickets limited to current page">
+            <input id="closeticketsallfiltered_button" type="button" value="Close all tickets in current filter" title="Closes all tickets limited to current filtering">
+        </div>
 
         <script src="scripts.js"></script>
     </body>
