@@ -8,28 +8,28 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <main style="max-width: 800px;margin: auto;">
-            <div class="card border-dark mb-3" style="width: 50rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Control panel</h5>
+        <main style="max-width: 50vw;margin: auto;padding-top: 2rem;padding-left: 2rem;padding-right: 2rem;">
+            <div class="card border-dark mb-3">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-center">Control panel</h5>
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-4 input-group-text">Company ID</div>
-                            <div class="col-4 input-group-text">From</div>
-                            <div class="col-4 input-group-text">Until</div>
+                            <div class="col-md-4 input-group-text"><b>Company ID</b></div>
+                            <div class="col-md-4 input-group-text"><b>From</b></div>
+                            <div class="col-md-4 input-group-text"><b>Until</b></div>
                         </div>
                         <div class="row">
-                            <div id="listfiltering_controls" style="margin: auto;width: 50rem;">
+                            <div id="listfiltering_controls" style="margin: auto;width: 60rem;">
                                 <div class="input-group">
                                     <input id="companyid_input" class="form-control" aria-label="Company ID" type="text" placeholder="Company ID">
                                     <input id="startdate_input" class="form-control" aria-lavel="Start of date range" type="date" placeholder="Start of date range">
                                     <input id="enddate_input" class="form-control" aria-label="End of date range" type="date" placeholder="End of date range">
                                 </div>
-                                <input id="refreshlist_button" class="btn btn-primary" type="button" value="Refresh and filter list" title="Refreshes the list and filters list" style="margin: auto;">
+                                <input id="refreshlist_button" class="btn btn-primary btn-block" type="button" value="Refresh and filter list" title="Refreshes the list using filters if set" style="margin-top: 1rem;">
                             </div>
                         </div>
                     </div>
-                    <div id="ticketactions_controls">
+                    <div id="ticketactions_controls" style="align-self: left;margin-top: 1rem;">
                         Close all tickets in current<br>
                         <div class="btn-group" role="group">
                             <input id="closeticketspage_button" class="btn btn-primary" type="button" value="Page" title="Close all tickets limited to current page">
@@ -38,9 +38,88 @@
                     </div>
                 </div>
             </div>
+            <div class="card border-dark mb-3 text-center">
+                <div class="card-body">
+                    <div class="container-fluid">
+                        <h5 class="card-title">Tickets</h5>
+                        <div class="row">
+                            <div class="card bg-dark mb-3 col-4">
+                                <h5 class="card-header">Ticket</h5>
+                                <div class="card-body">
+                                    <h6 class="card-title text-muted">Last updated</h6>
+                                    <h6 class="card-subtitle mb-2 text-muted">Status</h6>
+                                    Description
+                                </div>
+                            </div>
+                            <div class="card bg-dark mb-3 col-4">
+                                <h5 class="card-header">Ticket</h5>
+                                <div class="card-body">
+                                    <h6 class="card-title text-muted">Last updated</h6>
+                                    <h6 class="card-subtitle mb-2 text-muted">Status</h6>
+                                    Description
+                                </div>
+                            </div>
+                            <div class="card bg-dark mb-3 col-4">
+                                <h5 class="card-header">Ticket</h5>
+                                <div class="card-body">
+                                    <h6 class="card-title text-muted">Last updated</h6>
+                                    <h6 class="card-subtitle mb-2 text-muted">Status</h6>
+                                    Description
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card bg-dark mb-3 col-4">
+                                <h5 class="card-header">Ticket</h5>
+                                <div class="card-body">
+                                    <h6 class="card-title text-muted">Last updated</h6>
+                                    <h6 class="card-subtitle mb-2 text-muted">Status</h6>
+                                    Description
+                                </div>
+                            </div>
+                            <div class="card bg-dark mb-3 col-4">
+                                <h5 class="card-header">Ticket</h5>
+                                <div class="card-body">
+                                    <h6 class="card-title text-muted">Last updated</h6>
+                                    <h6 class="card-subtitle mb-2 text-muted">Status</h6>
+                                    Description
+                                </div>
+                            </div>
+                            <div class="card bg-dark mb-3 col-4">
+                                <h5 class="card-header">Ticket</h5>
+                                <div class="card-body">
+                                    <h6 class="card-title text-muted">Last updated</h6>
+                                    <h6 class="card-subtitle mb-2 text-muted">Status</h6>
+                                    Description
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <nav>
+                        <ul class="pagination">
+                            <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
         </main>
 
         <!-- Scripts -->
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
         <script src="scripts.js"></script>
     </body>
 </html>
