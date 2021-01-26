@@ -3,20 +3,44 @@
     <head>
         <meta charset="UTF-8">
         <title>Freshdesk Utilities Interface</title>
+        <!-- CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <div id="listfiltering_controls">
-            <input id="companyid_input" type="text" placeholder="Company ID">
-            <input id="startdate_input" type="date" placeholder="Start of date range">
-            <input id="enddate_input" type="date" placeholder="End of date range">
-            <input id="refreshlist_button" type="button" value="Refresh and filter list" title="Refreshes the list and filters list">
-        </div>
-        <div id="ticketactions_controls">
-            <input id="closeticketspage_button" type="button" value="Close all tickets in current page" title="Close all tickets limited to current page">
-            <input id="closeticketsallfiltered_button" type="button" value="Close all tickets in current filter" title="Closes all tickets limited to current filtering">
-        </div>
+        <main style="max-width: 800px;margin: auto;">
+            <div class="card border-dark mb-3" style="width: 50rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Control panel</h5>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-4 input-group-text">Company ID</div>
+                            <div class="col-4 input-group-text">From</div>
+                            <div class="col-4 input-group-text">Until</div>
+                        </div>
+                        <div class="row">
+                            <div id="listfiltering_controls" style="margin: auto;width: 50rem;">
+                                <div class="input-group">
+                                    <input id="companyid_input" class="form-control" aria-label="Company ID" type="text" placeholder="Company ID">
+                                    <input id="startdate_input" class="form-control" aria-lavel="Start of date range" type="date" placeholder="Start of date range">
+                                    <input id="enddate_input" class="form-control" aria-label="End of date range" type="date" placeholder="End of date range">
+                                </div>
+                                <input id="refreshlist_button" class="btn btn-primary" type="button" value="Refresh and filter list" title="Refreshes the list and filters list" style="margin: auto;">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="ticketactions_controls">
+                        Close all tickets in current<br>
+                        <div class="btn-group" role="group">
+                            <input id="closeticketspage_button" class="btn btn-primary" type="button" value="Page" title="Close all tickets limited to current page">
+                            <input id="closeticketsfiltered_button" class="btn btn-primary" type="button" value="Filter" title="Closes all tickets limited to current filtering">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
 
+        <!-- Scripts -->
         <script src="scripts.js"></script>
     </body>
 </html>
