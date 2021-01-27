@@ -40,8 +40,8 @@ ent_ticketid = ttk.Entry(frm_ticket, width=10)
 ent_ticketid.place(x=5, y=20)
 btn_getticket = ttk.Button(frm_ticket, text="Get ticket")
 btn_getticket.place(x=75, y=19)
-btn_closeticket = ttk.Button(frm_ticket, text="Close ticket")
-btn_closeticket.place(x=150, y=19)
+btn_closeticket = ttk.Button(frm_ticket, text="Close ticket", state="disabled")
+btn_closeticket.place(x=155, y=19)
 #btn_testticket = ttk.Button(frm_ticket, text="Resolve ticket for testing")
 #btn_testticket.place(x=250, y=19)
 # Ticket details
@@ -103,6 +103,8 @@ def getTicket(e):
         loadedTicket = backend.getTicket(int(ent_ticketid.get()))
     except ValueError:
         return messagebox.showerror("Error", "Ticket ID is not a number")
+    if loadedTicket.status != "closed":
+        btn_closeticket.config(state="normal")
     lbl_ticketid.config(text=f"ID: {loadedTicket.id}")
     lbl_ticketsubject.config(text=f"Subject: {loadedTicket.subject}")
     lbl_ticketstatus.config(text=f"Status: {loadedTicket.status}")
@@ -140,10 +142,13 @@ def displayTicketDescription(e):
     win_desc.mainloop()
 
 def closeTicket(e):
+    if btn_closeticket["state"] == "disabled":
+        return
     if not loadedTicket:
         return messagebox.showerror("No ticket loaded", "There is no ticket loaded to have its status updated")
     if backend.closeTicket(loadedTicket.id):
         getTicket(loadedTicket.id)
+        btn_closeticket.config(state="disabled")
     else:
         messagebox.showerror("Ticket update failed", "The ticket could not be updated")
 
