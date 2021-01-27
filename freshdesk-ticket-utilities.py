@@ -8,6 +8,7 @@ import backend
 
 # Initialize frames
 win_main = tk.Tk()
+win_main.title("Freshdesk Ticket Utilities")
 win_main.resizable(False, False)
 frm_ticketlist = ttk.Frame(win_main, relief="raised", borderwidth=1, height=300, width=450)
 frm_ticketlist.pack(side="left", anchor="n")
