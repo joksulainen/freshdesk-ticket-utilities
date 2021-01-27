@@ -1,11 +1,17 @@
-# Import dependencies
-
 # Import Freshdesk API library
 from freshdesk.api import API
 
-desk = API("datakolmio.freshdesk.com", "QN7iapNyeE1nT0qDXooc")
+tokenFile = open("token.txt", "r")
+tokenContents = tokenFile.read()
+tokenFile.close()
+tokenContents = tokenContents.splitlines()
+
+desk = API(tokenContents[0], tokenContents[1])
+
+tokenContents = None
 
 testcustomer = 62006642867
+testticket = 839
 ticketsPerPage = 20
 
 divider = "-----------------------"
@@ -93,5 +99,25 @@ def viewTicket():
     print(f"Company ID: {ticket.company['id']}")
     print(divider)
 
+# Returns ticket object
+def getTicket(ticketid):
+    return desk.tickets.get_ticket(ticketid, "stats", "requester", "company")
 
-mainMenu()
+
+# Returns True on success
+def closeTicket(ticketid):
+    try:
+        desk.tickets.update_ticket(ticketid, status=5)
+        return True
+    except:
+        return False
+
+def resolveTicketTest(ticketid):
+    try:
+        desk.tickets.update_ticket(ticketid, status=4)
+        return True
+    except:
+        return False
+
+
+# mainMenu()
