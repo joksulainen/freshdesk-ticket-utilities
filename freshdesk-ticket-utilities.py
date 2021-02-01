@@ -6,6 +6,7 @@ import tkcalendar as tkc
 # Import backend
 import backend
 
+# Button commands
 def getTicketList():
     pass
 
@@ -13,16 +14,21 @@ def bulkClose():
     pass
 
 def confirmBulkClose():
-    pass
+    if bulkCloseConfirm.get():
+        btn_bulkclose.config(state="normal")
+    else:
+        btn_bulkclose.config(state="disabled")
 
 def getTicket():
-    global loadedTicket
     try:
         loadedTicket = backend.getTicket(int(ent_ticketid.get()))
     except ValueError:
         return messagebox.showerror("Error", "Ticket ID is not a number")
     if loadedTicket.status != "closed":
         btn_closeticket.config(state="normal")
+    else:
+        btn_closeticket.config(state="disabled")
+    agent = backend.getAgent(loadedTicket.responder_id)
     lbl_details.config(text=f"""ID: {loadedTicket.id}
 Subject: {loadedTicket.subject}
 
@@ -31,6 +37,7 @@ Priority: {loadedTicket.priority}
 Escalated: {loadedTicket.is_escalated}
 Type: {loadedTicket.type}
 Tags: {', '.join(loadedTicket.tags)}
+Agent: {agent.contact["name"]}
 
 Created: {loadedTicket.created_at}
 Updated: {loadedTicket.updated_at}
@@ -47,10 +54,15 @@ Company ID: {loadedTicket.company['id']}""")
     lbl_description.config(text=loadedTicket.description_text)
 
 def closeTicket():
-    pass
+    if backend.closeTicket(loadedTicket):
+        btn_closeticket.config(state="disabled")
+    else:
+        messagebox.showerror("Problem with closing ticket", "An error has occurred while attempting to close ticket")
 
 # Create GUI
 win_main = tk.Tk()
+win_main.resizable(False, False)
+win_main.title("Freshdesk Ticket Utilities")
 frm_ticketlist = ttk.Frame(borderwidth='1', height='450', relief='raised', width='450')
 u0 = ttk.Label(frm_ticketlist, text='Company ID')
 u0.place(x='5', y='0')
@@ -69,9 +81,9 @@ btn_refreshlist.place(x='305', y='19')
 btn_bulkclose = ttk.Button(frm_ticketlist, state='disabled', text='Close tickets on page', command=bulkClose)
 btn_bulkclose.place(x='5', y='45')
 bulkCloseConfirm = tk.BooleanVar()
-chk_confirm = ttk.Checkbutton(frm_ticketlist, offvalue='False', onvalue='True', state='disabled', text='Are you sure?', variable=bulkCloseConfirm, command=confirmBulkClose)
+chk_confirm = ttk.Checkbutton(frm_ticketlist, offvalue='False', onvalue='True', state='normal', text='Are you sure?', variable=bulkCloseConfirm, command=confirmBulkClose)
 chk_confirm.place(x='128', y='47')
-sel_statusfilter = ttk.Combobox(frm_ticketlist, validate='focusout', values='"" "open" "pending" "resolved" "closed"', width='13')
+sel_statusfilter = ttk.Combobox(frm_ticketlist, values='"" "open" "pending" "resolved" "closed"', width='13')
 sel_statusfilter.place(x='305', y='45')
 trv_ticketlist = ttk.Treeview(frm_ticketlist, height='14')
 trv_ticketlist.place(width='410', x='10', y='80')
@@ -94,6 +106,7 @@ Priority:
 Escalated: 
 Type: 
 Tags: 
+Agent: 
 
 Created: 
 Updated: 
@@ -115,53 +128,6 @@ btn_getticket.place(x='75', y='19')
 btn_closeticket = ttk.Button(frm_ticket, state='disabled', text='Close ticket', command=closeTicket)
 btn_closeticket.place(x='155', y='19')
 frm_ticket.pack(anchor='n', side='left')
-
-
-# Event handler
-# Define functions
-#def getTicket(e):
-#    global loadedTicket
-#    try:
-#        loadedTicket = backend.getTicket(int(ent_ticketid.get()))
-#    except ValueError:
-#        return messagebox.showerror("Error", "Ticket ID is not a number")
-#    if loadedTicket.status != "closed":
-#        btn_closeticket.config(state="normal")
-#    lbl_ticketid.config(text=f"ID: {loadedTicket.id}")
-#    lbl_ticketsubject.config(text=f"Subject: {loadedTicket.subject}")
-#    lbl_ticketstatus.config(text=f"Status: {loadedTicket.status}")
-#    lbl_ticketpriority.config(text=f"Priority: {loadedTicket.priority}")
-#    lbl_ticketescalated.config(text=f"Escalated: {loadedTicket.is_escalated}")
-#    lbl_tickettype.config(text=f"Type: {loadedTicket.type}")
-#    lbl_tickettags.config(text=f"Tags: {', '.join(loadedTicket.tags)}")
-#    lbl_ticketcreated.config(text=f"Created: {loadedTicket.created_at}")
-#    lbl_ticketupdated.config(text=f"Updated: {loadedTicket.updated_at}")
-#    lbl_ticketdueby.config(text=f"Due by: {loadedTicket.due_by}")
-#    lbl_ticketfirstresponse.config(text=f"First response by: {loadedTicket.fr_due_by}")
-#    lbl_ticketsource.config(text=f"Source: {loadedTicket.source}")
-#    lbl_ticketrequester.config(text=f"Requester: {loadedTicket.requester['name']}")
-#    lbl_ticketemail.config(text=f"E-Mail: {loadedTicket.requester['email']}")
-#    lbl_ticketphone.config(text=f"Phone: {loadedTicket.requester['phone']}")
-#    lbl_ticketrequesterid.config(text=f"Requester ID: {loadedTicket.requester['id']}")
-#    lbl_ticketcompany.config(text=f"Company: {loadedTicket.company['name']}")
-#    lbl_ticketcompanyid.config(text=f"Company ID: {loadedTicket.company['id']}")
-
-#def closeTicket(e):
-#    if btn_closeticket["state"] == "disabled":
-#        return
-#    if not loadedTicket:
-#        return messagebox.showerror("No ticket loaded", "There is no ticket loaded to have its status updated")
-#    if backend.closeTicket(loadedTicket.id):
-#        getTicket(loadedTicket.id)
-#        btn_closeticket.config(state="disabled")
-#    else:
-#        messagebox.showerror("Ticket update failed", "The ticket could not be updated")
-
-#def resolveTicketTest(e):
-#    if backend.resolveTicketTest(loadedTicket.id):
-#        getTicket(loadedTicket.id)
-#    else:
-#        messagebox.showerror("Ticket update failed", "The ticket could not be updated")
 
 # Start the main loop which in turn displays the window
 win_main.mainloop()
