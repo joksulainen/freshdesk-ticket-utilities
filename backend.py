@@ -104,6 +104,11 @@ def getTicket(ticketid):
     return desk.tickets.get_ticket(ticketid, "stats", "requester", "company")
 
 
+# Returns agent object
+def getAgent(agentid):
+    return desk.agents.get_agent(agentid)
+
+
 # Returns True on success
 def closeTicket(ticketid):
     try:
