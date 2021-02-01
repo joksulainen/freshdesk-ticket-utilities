@@ -8,13 +8,13 @@
     <child>
       <object class="ttk.Frame" id="frm_ticketlist">
         <property name="borderwidth">1</property>
-        <property name="height">450</property>
+        <property name="height">400</property>
         <property name="relief">raised</property>
-        <property name="width">450</property>
+        <property name="width">600</property>
         <layout manager="pack">
-          <property name="anchor">n</property>
+          <property name="anchor">nw</property>
           <property name="propagate">True</property>
-          <property name="side">left</property>
+          <property name="side">top</property>
         </layout>
         <child>
           <object class="ttk.Label" id="u0">
@@ -129,7 +129,7 @@
             <property name="show">headings</property>
             <layout manager="place">
               <property name="anchor">nw</property>
-              <property name="width">410</property>
+              <property name="width">560</property>
               <property name="x">10</property>
               <property name="y">80</property>
             </layout>
@@ -141,7 +141,7 @@
             <layout manager="place">
               <property name="anchor">nw</property>
               <property name="height">307</property>
-              <property name="x">420</property>
+              <property name="x">570</property>
               <property name="y">80</property>
             </layout>
           </object>
@@ -151,13 +151,13 @@
     <child>
       <object class="ttk.Frame" id="frm_ticket">
         <property name="borderwidth">1</property>
-        <property name="height">450</property>
+        <property name="height">410</property>
         <property name="relief">raised</property>
         <property name="width">600</property>
         <layout manager="pack">
-          <property name="anchor">n</property>
+          <property name="anchor">nw</property>
           <property name="propagate">True</property>
-          <property name="side">left</property>
+          <property name="side">top</property>
         </layout>
         <child>
           <object class="ttk.Label" id="u3">
@@ -177,7 +177,7 @@
             <property name="wraplength">350</property>
             <layout manager="place">
               <property name="anchor">nw</property>
-              <property name="height">420</property>
+              <property name="height">380</property>
               <property name="width">355</property>
               <property name="x">236</property>
               <property name="y">20</property>
