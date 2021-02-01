@@ -99,6 +99,11 @@ def viewTicket():
     print(f"Company ID: {ticket.company['id']}")
     print(divider)
 
+
+def getTicketList(page):
+    return desk.tickets.list_tickets(filter_name=None, page=page, per_page=30)
+
+
 # Returns ticket object
 def getTicket(ticketid):
     return desk.tickets.get_ticket(ticketid, "stats", "requester", "company")
@@ -117,12 +122,4 @@ def closeTicket(ticketid):
     except:
         return False
 
-def resolveTicketTest(ticketid):
-    try:
-        desk.tickets.update_ticket(ticketid, status=4)
-        return True
-    except:
-        return False
 
-
-# mainMenu()
