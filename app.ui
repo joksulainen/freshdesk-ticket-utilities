@@ -1,0 +1,265 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface version="1.0">
+  <object class="tk.Toplevel" id="win_main">
+    <property name="height">200</property>
+    <property name="resizable">none</property>
+    <property name="title" translatable="yes">Freshdesk Ticket Utilities</property>
+    <property name="width">200</property>
+    <child>
+      <object class="ttk.Frame" id="frm_ticketlist">
+        <property name="borderwidth">1</property>
+        <property name="height">450</property>
+        <property name="relief">raised</property>
+        <property name="width">450</property>
+        <layout manager="pack">
+          <property name="anchor">n</property>
+          <property name="propagate">True</property>
+          <property name="side">left</property>
+        </layout>
+        <child>
+          <object class="ttk.Label" id="u0">
+            <property name="text" translatable="yes">Company ID</property>
+            <layout manager="place">
+              <property name="x">5</property>
+              <property name="y">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Entry" id="ent_companyid">
+            <property name="width">15</property>
+            <layout manager="place">
+              <property name="x">5</property>
+              <property name="y">20</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="u1">
+            <property name="text" translatable="yes">From</property>
+            <layout manager="place">
+              <property name="x">105</property>
+              <property name="y">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Entry" id="ent_startdate">
+            <property name="width">12</property>
+            <layout manager="place">
+              <property name="x">105</property>
+              <property name="y">20</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="u2">
+            <property name="text" translatable="yes">Until</property>
+            <layout manager="place">
+              <property name="x">205</property>
+              <property name="y">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Entry" id="ent_enddate">
+            <property name="width">12</property>
+            <layout manager="place">
+              <property name="x">205</property>
+              <property name="y">20</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="btn_refreshlist">
+            <property name="command">getTicketList</property>
+            <property name="idtocommand">false</property>
+            <property name="text" translatable="yes">Refresh and filter</property>
+            <layout manager="place">
+              <property name="x">305</property>
+              <property name="y">19</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="btn_bulkclose">
+            <property name="command">bulkClose</property>
+            <property name="idtocommand">false</property>
+            <property name="state">disabled</property>
+            <property name="text" translatable="yes">Close tickets on page</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="x">5</property>
+              <property name="y">45</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="chk_confirm">
+            <property name="command">confirmBulkClose</property>
+            <property name="idtocommand">false</property>
+            <property name="offvalue">False</property>
+            <property name="onvalue">True</property>
+            <property name="state">disabled</property>
+            <property name="text" translatable="yes">Are you sure?</property>
+            <property name="variable">boolean:bulkCloseConfirm</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="x">128</property>
+              <property name="y">47</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Combobox" id="sel_statusfilter">
+            <property name="validate">focusout</property>
+            <property name="values">"" "open" "pending" "resolved" "closed"</property>
+            <property name="width">13</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="x">305</property>
+              <property name="y">45</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Treeview" id="trv_ticketlist">
+            <property name="height">14</property>
+            <property name="selectmode">browse</property>
+            <property name="show">headings</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="width">410</property>
+              <property name="x">10</property>
+              <property name="y">80</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Scrollbar" id="scrl_ticketlist">
+            <property name="orient">vertical</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="height">307</property>
+              <property name="x">420</property>
+              <property name="y">80</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Frame" id="frm_ticket">
+        <property name="borderwidth">1</property>
+        <property name="height">450</property>
+        <property name="relief">raised</property>
+        <property name="width">600</property>
+        <layout manager="pack">
+          <property name="anchor">n</property>
+          <property name="propagate">True</property>
+          <property name="side">left</property>
+        </layout>
+        <child>
+          <object class="ttk.Label" id="u3">
+            <property name="text" translatable="yes">Description</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="x">236</property>
+              <property name="y">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="lbl_description">
+            <property name="borderwidth">1</property>
+            <property name="relief">sunken</property>
+            <property name="takefocus">true</property>
+            <property name="wraplength">350</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="height">420</property>
+              <property name="width">355</property>
+              <property name="x">236</property>
+              <property name="y">20</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="u4">
+            <property name="anchor">w</property>
+            <property name="text" translatable="yes">Ticket ID</property>
+            <layout manager="place">
+              <property name="x">5</property>
+              <property name="y">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="lbl_details">
+            <property name="anchor">w</property>
+            <property name="text" translatable="yes">ID: 
+Subject: 
+
+Status: 
+Priority: 
+Escalated: 
+Type: 
+Tags: 
+
+Created: 
+Updated: 
+Due by: 
+First response by: 
+
+Source: 
+Requester: 
+E-Mail: 
+Phone: 
+Requester ID: 
+Company: 
+Company ID: </property>
+            <property name="wraplength">220</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="width">220</property>
+              <property name="x">5</property>
+              <property name="y">50</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Entry" id="ent_ticketid">
+            <property name="width">10</property>
+            <layout manager="place">
+              <property name="x">5</property>
+              <property name="y">20</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="btn_getticket">
+            <property name="command">getTicket</property>
+            <property name="idtocommand">false</property>
+            <property name="text" translatable="yes">Get ticket</property>
+            <layout manager="place">
+              <property name="x">75</property>
+              <property name="y">19</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="btn_closeticket">
+            <property name="command">closeTicket</property>
+            <property name="idtocommand">false</property>
+            <property name="state">disabled</property>
+            <property name="text" translatable="yes">Close ticket</property>
+            <layout manager="place">
+              <property name="x">155</property>
+              <property name="y">19</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
