@@ -1,3 +1,5 @@
+# Import dependencies
+import time
 # Import tkinter toolkits
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -6,15 +8,16 @@ import tkcalendar as tkc
 # Import backend
 import backend
 
-# Prepare variable
+# Prepare variables
 loadedTicket = None
+companyDict = {}
 
 # Button commands
 def getTicketList():
     ticketlist = backend.getTicketList(1)
     for x in range(len(ticketlist)):
         ticket = ticketlist[x]
-        trv_ticketlist.insert("", "end", iid=x, text=ticket.id, values=(ticket.subject, ticket.status, ticket.created_at))
+        trv_ticketlist.insert("", "end", iid=x, text=ticket.id, values=("", ticket.subject, ticket.status, ticket.created_at.strftime("%d.%m.%Y")))
 
 def bulkClose():
     pass
@@ -73,8 +76,8 @@ win_main.title("Freshdesk Ticket Utilities")
 frm_ticketlist = ttk.Frame(borderwidth=1, height=400, relief='raised', width=600)
 u0 = ttk.Label(frm_ticketlist, text='Company ID')
 u0.place(x=5, y=0)
-ent_companyid = ttk.Entry(frm_ticketlist, width=15, exportselection="no")
-ent_companyid.place(x=5, y=20)
+sel_company = ttk.Combobox(frm_ticketlist, values='""', width=15)
+sel_company.place(x=5, y=20)
 u1 = ttk.Label(frm_ticketlist, text='From')
 u1.place(x=105, y=0)
 ent_startdate = tkc.DateEntry(frm_ticketlist, locale="fi_FI", width=12)
@@ -93,14 +96,16 @@ chk_confirm.place(x=128, y=47)
 sel_statusfilter = ttk.Combobox(frm_ticketlist, values='"" "open" "pending" "resolved" "closed"', width=13)
 sel_statusfilter.place(x=305, y=45)
 # Treeview configuration
-trv_ticketlist = ttk.Treeview(frm_ticketlist, height=14, columns=("Subject", "Status", "Created"), selectmode="browse", show="headings")
+trv_ticketlist = ttk.Treeview(frm_ticketlist, height=14, columns=("Company", "Subject", "Status", "Created"), selectmode="browse", show="headings")
 trv_ticketlist.heading("#0", text="ID")
-trv_ticketlist.heading("#1", text="Subject")
-trv_ticketlist.heading("#2", text="Status")
-trv_ticketlist.heading("#3", text="Created")
-trv_ticketlist.column("#1", stretch="yes", minwidth=200, width=200)
-trv_ticketlist.column("#2", stretch="no", minwidth=60, width=60)
-trv_ticketlist.column("#3", stretch="no", minwidth=150, width=150)
+trv_ticketlist.heading("#1", text="Company")
+trv_ticketlist.heading("#2", text="Subject")
+trv_ticketlist.heading("#3", text="Status")
+trv_ticketlist.heading("#4", text="Created")
+trv_ticketlist.column("#1", stretch="yes", minwidth=150, width=150)
+trv_ticketlist.column("#2", stretch="yes", minwidth=200, width=200)
+trv_ticketlist.column("#3", stretch="no", minwidth=60, width=60)
+trv_ticketlist.column("#4", stretch="no", minwidth=70, width=70)
 trv_ticketlist.place(width=560, x=10, y=80)
 vsb_ticketlist = ttk.Scrollbar(frm_ticketlist, orient='vertical', command=trv_ticketlist.yview)
 trv_ticketlist.configure(yscrollcommand=vsb_ticketlist.set)
@@ -148,12 +153,23 @@ btn_closeticket.place(x=155, y=19)
 frm_ticket.pack(anchor='nw', side='top')
 
 # Treeview selection
-def ticketSelected(e):
+def selectTicket(e):
     selectedTicket = trv_ticketlist.item(trv_ticketlist.focus())["text"]
     ticketidVar.set(selectedTicket)
     getTicket()
 
-trv_ticketlist.bind("<Double-Button-1>", ticketSelected)
+trv_ticketlist.bind("<Double-Button-1>", selectTicket)
+
+# Get companies
+companies = backend.getCompanies()
+for company in companies:
+    companyDict[company.name] = company.id
+
+# Construct company combobox options
+companyOptions = '"" '
+for company in companyDict:
+    companyOptions = companyOptions + f'"{company} ({companyDict[company]})" '
+sel_company.config(values=companyOptions)
 
 # Start the main loop which in turn displays the window
 win_main.mainloop()
