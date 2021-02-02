@@ -100,7 +100,7 @@ def viewTicket():
     print(divider)
 
 
-def getTicketList(page):
+def getTicketList(page, **kwargs):
     return desk.tickets.list_tickets(filter_name=None, page=page, per_page=30)
 
 
@@ -112,6 +112,11 @@ def getTicket(ticketid):
 # Returns agent object
 def getAgent(agentid):
     return desk.agents.get_agent(agentid)
+
+
+# Returns list of companies
+def getCompanies():
+    return desk.companies.list_companies()
 
 
 # Returns True on success
