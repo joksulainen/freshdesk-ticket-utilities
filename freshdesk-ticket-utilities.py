@@ -48,8 +48,8 @@ Type: {loadedTicket.type}
 Tags: {', '.join(loadedTicket.tags)}
 Agent: {agent.contact["name"]}
 
-Created: {loadedTicket.created_at}
-Updated: {loadedTicket.updated_at}
+Created: {loadedTicket.created_at.strftime("%d.%m.%Y %H.%M")}
+Updated: {loadedTicket.updated_at.strftime("%d.%m.%Y %H.%M")}
 Due by: {loadedTicket.due_by}
 First response by: {loadedTicket.fr_due_by}
 
@@ -74,27 +74,27 @@ win_main.resizable(False, False)
 win_main.title("Freshdesk Ticket Utilities")
 # Main frame
 frm_ticketlist = ttk.Frame(borderwidth=1, height=400, relief='raised', width=600)
-u0 = ttk.Label(frm_ticketlist, text='Company ID')
+u0 = ttk.Label(frm_ticketlist, text='Company')
 u0.place(x=5, y=0)
-sel_company = ttk.Combobox(frm_ticketlist, values='""', width=15)
+sel_company = ttk.Combobox(frm_ticketlist, values='""', width=16)
 sel_company.place(x=5, y=20)
 u1 = ttk.Label(frm_ticketlist, text='From')
-u1.place(x=105, y=0)
+u1.place(x=130, y=0)
 ent_startdate = tkc.DateEntry(frm_ticketlist, locale="fi_FI", width=12)
-ent_startdate.place(x=105, y=20)
+ent_startdate.place(x=130, y=20)
 u2 = ttk.Label(frm_ticketlist, text='Until')
-u2.place(x=205, y=0)
+u2.place(x=230, y=0)
 ent_enddate = tkc.DateEntry(frm_ticketlist, locale="fi_Fi",width=12)
-ent_enddate.place(x=205, y=20)
+ent_enddate.place(x=230, y=20)
 btn_refreshlist = ttk.Button(frm_ticketlist, text='Refresh and filter', command=getTicketList)
-btn_refreshlist.place(x=305, y=19)
+btn_refreshlist.place(x=330, y=19)
 btn_bulkclose = ttk.Button(frm_ticketlist, state='disabled', text='Close tickets on page', command=bulkClose)
 btn_bulkclose.place(x=5, y=45)
 confirmBulkCloseVar = tk.BooleanVar()
 chk_confirm = ttk.Checkbutton(frm_ticketlist, state='disabled', text='Are you sure?', variable=confirmBulkCloseVar, command=confirmBulkClose)
 chk_confirm.place(x=128, y=47)
 sel_statusfilter = ttk.Combobox(frm_ticketlist, values='"" "open" "pending" "resolved" "closed"', width=13)
-sel_statusfilter.place(x=305, y=45)
+sel_statusfilter.place(x=330, y=45)
 # Treeview configuration
 trv_ticketlist = ttk.Treeview(frm_ticketlist, height=14, columns=("Company", "Subject", "Status", "Created"), selectmode="browse", show="headings")
 trv_ticketlist.heading("#0", text="ID")
