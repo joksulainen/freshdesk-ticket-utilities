@@ -14,6 +14,11 @@ companyDict = {}
 
 # Button commands
 def getTicketList():
+    if trv_ticketlist.exists(0):
+        try:
+            for x in range(30):
+                trv_ticketlist.delete(x)
+        except tk.TclError: pass
     ticketlist = backend.getTicketList(1)
     for x in range(len(ticketlist)):
         ticket = ticketlist[x]
