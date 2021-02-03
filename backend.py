@@ -12,8 +12,17 @@ tokenContents = None
 
 
 # Returns filtered list of tickets
-def getTicketList(page=1, fromDate="", untilDate="", **kwargs):
-    return desk.tickets.list_tickets(filter_name=None, page=page, per_page=30)
+def getTicketList(page, fromDate, untilDate, **kwargs):
+    try:
+        try:
+            return desk.tickets.filter_tickets(page=page, query=f"created_at:>'{fromDate}'%20AND%20created_at:<'{untilDate}'%20AND%20company_id:{kwargs['companyid']}%20AND%20status:{kwargs['status']}")
+        except KeyError:
+            return desk.tickets.filter_tickets(page=page, query=f"created_at:>'{fromDate}'%20AND%20created_at:<'{untilDate}'%20AND%20company_id:{kwargs['companyid']}")
+    except KeyError:
+        try:
+            return desk.tickets.filter_tickets(page=page, query=f"created_at:>'{fromDate}'%20AND%20created_at:<'{untilDate}'%20AND%20status:{kwargs['status']}")
+        except KeyError:
+            return desk.tickets.filter_tickets(page=page, query=f"created_at:>'{fromDate}'%20AND%20created_at:<'{untilDate}'")
 
 # Returns ticket object
 def getTicket(ticketid):
