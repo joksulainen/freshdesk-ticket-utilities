@@ -27,7 +27,7 @@
         </child>
         <child>
           <object class="ttk.Combobox" id="sel_company">
-            <property name="width">16</property>
+            <property name="width">20</property>
             <layout manager="place">
               <property name="anchor">nw</property>
               <property name="x">5</property>
@@ -39,7 +39,7 @@
           <object class="ttk.Label" id="u1">
             <property name="text" translatable="yes">From</property>
             <layout manager="place">
-              <property name="x">130</property>
+              <property name="x">150</property>
               <property name="y">0</property>
             </layout>
           </object>
@@ -48,7 +48,7 @@
           <object class="ttk.Entry" id="ent_startdate">
             <property name="width">12</property>
             <layout manager="place">
-              <property name="x">130</property>
+              <property name="x">150</property>
               <property name="y">20</property>
             </layout>
           </object>
@@ -57,7 +57,7 @@
           <object class="ttk.Label" id="u2">
             <property name="text" translatable="yes">Until</property>
             <layout manager="place">
-              <property name="x">230</property>
+              <property name="x">250</property>
               <property name="y">0</property>
             </layout>
           </object>
@@ -66,19 +66,30 @@
           <object class="ttk.Entry" id="ent_enddate">
             <property name="width">12</property>
             <layout manager="place">
-              <property name="x">230</property>
+              <property name="x">250</property>
               <property name="y">20</property>
             </layout>
           </object>
         </child>
         <child>
-          <object class="ttk.Button" id="btn_refreshlist">
-            <property name="command">getTicketList</property>
-            <property name="idtocommand">false</property>
-            <property name="text" translatable="yes">Refresh and filter</property>
+          <object class="ttk.Label" id="u3">
+            <property name="text" translatable="yes">Status</property>
             <layout manager="place">
-              <property name="x">330</property>
-              <property name="y">19</property>
+              <property name="anchor">nw</property>
+              <property name="x">350</property>
+              <property name="y">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Combobox" id="sel_statusfilter">
+            <property name="validate">focusout</property>
+            <property name="values">"" "open" "pending" "resolved" "closed"</property>
+            <property name="width">13</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="x">350</property>
+              <property name="y">20</property>
             </layout>
           </object>
         </child>
@@ -112,13 +123,12 @@
           </object>
         </child>
         <child>
-          <object class="ttk.Combobox" id="sel_statusfilter">
-            <property name="validate">focusout</property>
-            <property name="values">"" "open" "pending" "resolved" "closed"</property>
-            <property name="width">13</property>
+          <object class="ttk.Button" id="btn_refreshlist">
+            <property name="command">getTicketList</property>
+            <property name="idtocommand">false</property>
+            <property name="text" translatable="yes">Refresh</property>
             <layout manager="place">
-              <property name="anchor">nw</property>
-              <property name="x">330</property>
+              <property name="x">350</property>
               <property name="y">45</property>
             </layout>
           </object>
@@ -161,7 +171,7 @@
           <property name="side">top</property>
         </layout>
         <child>
-          <object class="ttk.Label" id="u3">
+          <object class="ttk.Label" id="u4">
             <property name="text" translatable="yes">Description</property>
             <layout manager="place">
               <property name="anchor">nw</property>
@@ -186,7 +196,7 @@
           </object>
         </child>
         <child>
-          <object class="ttk.Label" id="u4">
+          <object class="ttk.Label" id="u5">
             <property name="anchor">w</property>
             <property name="text" translatable="yes">Ticket ID</property>
             <layout manager="place">
