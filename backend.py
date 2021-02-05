@@ -24,7 +24,7 @@ def fetchAgent(agentid):
     return desk.agents.get_agent(agentid)
 
 # Returns list of companies
-def fetchCompany():
+def fetchCompanies():
     return desk.companies.list_companies()
 
 # Returns True on success
