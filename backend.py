@@ -11,18 +11,9 @@ desk = API(tokenContents[0], tokenContents[1])
 tokenContents = None
 
 
-# Returns filtered list of tickets
-def getTicketList(page, fromDate, untilDate, **kwargs):
-    try:
-        try:
-            return desk.tickets.filter_tickets(page=page, query=f"created_at:>'{fromDate}'%20AND%20created_at:<'{untilDate}'%20AND%20company_id:{kwargs['companyid']}%20AND%20status:{kwargs['status']}")
-        except KeyError:
-            return desk.tickets.filter_tickets(page=page, query=f"created_at:>'{fromDate}'%20AND%20created_at:<'{untilDate}'%20AND%20company_id:{kwargs['companyid']}")
-    except KeyError:
-        try:
-            return desk.tickets.filter_tickets(page=page, query=f"created_at:>'{fromDate}'%20AND%20created_at:<'{untilDate}'%20AND%20status:{kwargs['status']}")
-        except KeyError:
-            return desk.tickets.filter_tickets(page=page, query=f"created_at:>'{fromDate}'%20AND%20created_at:<'{untilDate}'")
+# API limit is 9k tickets. Do this until empty page.
+def getTicketList(page, fromDate, untilDate):
+    return desk.tickets.filter_tickets(page=page, query=f"created_at:>'{fromDate}'%20AND%20created_at:<'{untilDate}'")
 
 # Returns ticket object
 def getTicket(ticketid):
