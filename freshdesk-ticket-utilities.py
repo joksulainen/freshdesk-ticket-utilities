@@ -26,7 +26,7 @@ def getTicketList():
     while True:
         # Add 1 to x each loop for page increment
         x = x + 1
-        toAppend = backend.getTicketList(x, fromDate, untilDate)
+        toAppend = backend.fetchTicketList(x, fromDate, untilDate)
         if len(toAppend) == 0:
             break
         for item in toAppend:
@@ -47,6 +47,8 @@ def filterView():
         chk_confirm.config(state="normal")
     else:
         chk_confirm.config(state="disabled")
+        btn_bulkclose.config(state="disabled")
+        confirmBulkCloseVar.set(False)
     if sel_statusfilter.current():
         filterByStatus = True
     if filterByCompany and filterByStatus:
@@ -67,6 +69,7 @@ def filterView():
     refreshView()
     
 def refreshView():
+    lbl_ticketcount.config(text=f"Total: {len(ticketList)} ({len(filteredView)})")
     if trv_ticketlist.exists(0):
         try:
             x = 0
@@ -86,7 +89,18 @@ def refreshView():
         trv_ticketlist.insert("", "end", iid=x, text=ticket.id, values=(company, ticket.subject, ticket.status, ticket.created_at.strftime("%d.%m.%Y")))
 
 def bulkClose():
-    pass
+    successful = 0
+    failed = 0
+    for item in filteredView:
+        if backend.closeTicket(item.id):
+            successful = successful + 1
+        else:
+            failed = failed + 1
+    if failed > 0:
+        return messagebox.showwarning("Tickets closed", f"Successfully closed {successful} ticket(s)\nFailed to close {failed} ticket(s)\nTotal: {successful+failed}")
+    else:
+        return messagebox.showinfo("Tickets closed", f"Successfully closed {successful} ticket(s)")
+    confirmBulkCloseVar.set(False)
 
 def confirmBulkClose():
     if confirmBulkCloseVar.get():
@@ -97,14 +111,14 @@ def confirmBulkClose():
 def getTicket():
     global loadedTicket
     try:
-        loadedTicket = backend.getTicket(int(ticketidVar.get()))
+        loadedTicket = backend.fetchTicket(int(ticketidVar.get()))
     except ValueError:
         return messagebox.showerror("Error", "Ticket ID is not a number")
     if loadedTicket.status != "closed":
         btn_closeticket.config(state="normal")
     else:
         btn_closeticket.config(state="disabled")
-    agent = backend.getAgent(loadedTicket.responder_id)
+    agent = backend.fetchAgent(loadedTicket.responder_id)
     try:
         companyname = loadedTicket.company['name']
         companyid = loadedTicket.company['id']
@@ -170,6 +184,8 @@ btn_bulkclose.place(x=5, y=45)
 confirmBulkCloseVar = tk.BooleanVar()
 chk_confirm = ttk.Checkbutton(frm_ticketlist, state='disabled', text='Are you sure?', variable=confirmBulkCloseVar, command=confirmBulkClose)
 chk_confirm.place(x=128, y=47)
+lbl_ticketcount = ttk.Label(frm_ticketlist, text="Total: ")
+lbl_ticketcount.place(x=220, y=60)
 btn_refreshlist = ttk.Button(frm_ticketlist, text='Refresh', command=filterView)
 btn_refreshlist.place(x=415, y=45)
 btn_reloadlist = ttk.Button(frm_ticketlist, text='Reload', command=getTicketList)
@@ -180,7 +196,7 @@ trv_ticketlist.heading("#1", text="Company")
 trv_ticketlist.heading("#2", text="Subject")
 trv_ticketlist.heading("#3", text="Status")
 trv_ticketlist.heading("#4", text="Created")
-trv_ticketlist.column("#1", stretch="no", minwidth=200, width=200)
+trv_ticketlist.column("#1", stretch="no", minwidth=150, width=150)
 trv_ticketlist.column("#2", stretch="yes", minwidth=200, width=200)
 trv_ticketlist.column("#3", stretch="no", minwidth=60, width=60)
 trv_ticketlist.column("#4", stretch="no", minwidth=70, width=70)
@@ -238,7 +254,7 @@ def selectTicket(e):
 trv_ticketlist.bind("<Double-Button-1>", selectTicket)
 
 # Get companies
-companies = backend.getCompanies()
+companies = backend.fetchCompanies()
 for company in companies:
     companyDict[company.id] = company.name
 
