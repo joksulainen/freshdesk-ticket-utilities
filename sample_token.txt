@@ -1,0 +1,4 @@
+test.freshdesk.com
+API key
+
+Remember to rename file to token.txt. Script only uses the first 2 lines.
