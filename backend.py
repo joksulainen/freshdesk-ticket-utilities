@@ -11,20 +11,20 @@ desk = API(tokenContents[0], tokenContents[1])
 tokenContents = None
 
 
-# API limit is 9k tickets. Do this until empty page.
-def getTicketList(page, fromDate, untilDate):
+# Returns a list of tickets in specified date range
+def fetchTicketList(page, fromDate, untilDate):
     return desk.tickets.filter_tickets(page=page, query=f"created_at:>'{fromDate}'%20AND%20created_at:<'{untilDate}'")
 
 # Returns ticket object
-def getTicket(ticketid):
+def fetchTicket(ticketid):
     return desk.tickets.get_ticket(ticketid, "stats", "requester", "company")
 
 # Returns agent object
-def getAgent(agentid):
+def fetchAgent(agentid):
     return desk.agents.get_agent(agentid)
 
 # Returns list of companies
-def getCompanies():
+def fetchCompany():
     return desk.companies.list_companies()
 
 # Returns True on success
