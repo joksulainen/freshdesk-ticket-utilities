@@ -6,7 +6,10 @@ tokenContents = tokenFile.read()
 tokenFile.close()
 tokenContents = tokenContents.splitlines()
 
-desk = API(tokenContents[0], tokenContents[1])
+try:
+    desk = API(tokenContents[0], tokenContents[1])
+except:
+    exit()
 
 tokenContents = None
 
