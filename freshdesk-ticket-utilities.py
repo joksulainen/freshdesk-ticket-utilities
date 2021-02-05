@@ -1,6 +1,5 @@
 # Import dependencies
 from datetime import datetime, timedelta
-import asyncio
 import re
 # Import tkinter toolkits
 import tkinter as tk
