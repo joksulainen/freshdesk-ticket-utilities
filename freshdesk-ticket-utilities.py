@@ -17,6 +17,7 @@ statusDict = {0: "", 1: "open", 2: "pending", 3: "resolved", 4: "closed"}
 companyDict = {}
 
 # Button commands
+# Fetches tickets from backend and appends them to ticketList list variable
 def getTicketList():
     global ticketList, filteredView
     ticketList = []
@@ -33,6 +34,7 @@ def getTicketList():
             ticketList.append(item)
     filterView()
 
+# Filters the view in treeview to include specific companies and/or statuses
 def filterView():
     global filteredView
     filteredView = []
@@ -67,7 +69,8 @@ def filterView():
     else:
         filteredView = ticketList
     refreshView()
-    
+
+# Rebuilds the view in treeview
 def refreshView():
     lbl_ticketcount.config(text=f"Total: {len(ticketList)} ({len(filteredView)})")
     if trv_ticketlist.exists(0):
@@ -88,6 +91,7 @@ def refreshView():
             company = None
         trv_ticketlist.insert("", "end", iid=x, text=ticket.id, values=(company, ticket.subject, ticket.status, ticket.created_at.strftime("%d.%m.%Y")))
 
+# Closes all tickets in the filtered view
 def bulkClose():
     successful = 0
     failed = 0
@@ -108,6 +112,7 @@ def confirmBulkClose():
     else:
         btn_bulkclose.config(state="disabled")
 
+# Fetches a ticket by its ID and displays details about it
 def getTicket():
     global loadedTicket
     try:
@@ -149,6 +154,7 @@ Company: {companyname}
 Company ID: {companyid}""")
     lbl_description.config(text=loadedTicket.description_text)
 
+# Closes the currently loaded ticket
 def closeTicket():
     if backend.closeTicket(loadedTicket.id):
         btn_closeticket.config(state="disabled")
@@ -264,6 +270,7 @@ for company in companyDict:
     companyOptions = companyOptions + f'"{companyDict[company]} ({company})" '
 sel_company.config(values=companyOptions)
 
+# Initial fetch
 getTicketList()
 
 # Start the main loop which in turn displays the window
