@@ -151,7 +151,7 @@ def getTicket():
     +f'Phone: {loadedTicket.requester["phone"]}\n'
     +f'Requester ID: {loadedTicket.requester["id"]}\n'
     +f'Company: {companyname}\n'
-    +f'Company ID: {companyid}\n')
+    +f'Company ID: {companyid}')
     lbl_description.config(text=loadedTicket.description_text)
 
 # Closes the currently loaded ticket
