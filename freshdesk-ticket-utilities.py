@@ -130,28 +130,28 @@ def getTicket():
     except KeyError:
         companyname = None
         companyid = None
-    lbl_details.config(text=f"""ID: {loadedTicket.id}
-Subject: {loadedTicket.subject}
-
-Status: {loadedTicket.status}
-Priority: {loadedTicket.priority}
-Escalated: {loadedTicket.is_escalated}
-Type: {loadedTicket.type}
-Tags: {', '.join(loadedTicket.tags)}
-Agent: {agent.contact["name"]}
-
-Created: {loadedTicket.created_at.strftime("%d.%m.%Y %H.%M")}
-Updated: {loadedTicket.updated_at.strftime("%d.%m.%Y %H.%M")}
-Due by: {loadedTicket.due_by}
-First response by: {loadedTicket.fr_due_by}
-
-Source: {loadedTicket.source}
-Requester: {loadedTicket.requester['name']}
-E-Mail: {loadedTicket.requester['email']}
-Phone: {loadedTicket.requester['phone']}
-Requester ID: {loadedTicket.requester['id']}
-Company: {companyname}
-Company ID: {companyid}""")
+    lbl_details.config(text=f'ID: {loadedTicket.id}\n'
+    +f'Subject: {loadedTicket.subject}\n'
+    +'\n'
+    +f'Status: {loadedTicket.status}\n'
+    +f'Priority: {loadedTicket.priority}\n'
+    +f'Escalated: {loadedTicket.is_escalated}\n'
+    +f'Type: {loadedTicket.type}\n'
+    +f'Tags: {", ".join(loadedTicket.tags)}\n'
+    +f'Agent: {agent.contact["name"]}\n'
+    +'\n'
+    +f'Created: {loadedTicket.created_at.strftime("%d.%m.%Y %H.%M")}\n'
+    +f'Updated: {loadedTicket.updated_at.strftime("%d.%m.%Y %H.%M")}\n'
+    +f'Due by: {loadedTicket.due_by}\n'
+    +f'First response by: {loadedTicket.fr_due_by}\n'
+    +'\n'
+    +f'Source: {loadedTicket.source}\n'
+    +f'Requester: {loadedTicket.requester["name"]}\n'
+    +f'E-Mail: {loadedTicket.requester["email"]}\n'
+    +f'Phone: {loadedTicket.requester["phone"]}\n'
+    +f'Requester ID: {loadedTicket.requester["id"]}\n'
+    +f'Company: {companyname}\n'
+    +f'Company ID: {companyid}\n')
     lbl_description.config(text=loadedTicket.description_text)
 
 # Closes the currently loaded ticket
@@ -218,28 +218,28 @@ lbl_description = ttk.Label(frm_ticket, borderwidth=1, relief='sunken', wrapleng
 lbl_description.place(height=380, width=355, x=236, y=20)
 ttk.Label(frm_ticket, text='Ticket ID').place(x=5, y=0)
 lbl_details = ttk.Label(frm_ticket)
-lbl_details.configure(text='''ID: 
-Subject: 
-
-Status: 
-Priority: 
-Escalated: 
-Type: 
-Tags: 
-Agent: 
-
-Created: 
-Updated: 
-Due by: 
-First response by: 
-
-Source: 
-Requester: 
-E-Mail: 
-Phone: 
-Requester ID: 
-Company: 
-Company ID: ''', wraplength=220)
+lbl_details.configure(text='ID: \n' 
++'Subject: \n'
++'\n'
++'Status: \n'
++'Priority: \n'
++'Escalated: \n'
++'Type: \n'
++'Tags: \n'
++'Agent: \n'
++'\n'
++'Created: \n'
++'Updated: \n'
++'Due by: \n'
++'First response by: \n'
++'\n'
++'Source: \n'
++'Requester: \n'
++'E-Mail: \n'
++'Phone: \n'
++'Requester ID: \n'
++'Company: \n'
++'Company ID: ', wraplength=220)
 lbl_details.place(width=220, x=5, y=50)
 ticketidVar = tk.StringVar()
 ent_ticketid = ttk.Entry(frm_ticket, width=10, exportselection="no", textvariable=ticketidVar)
