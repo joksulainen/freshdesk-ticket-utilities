@@ -27,6 +27,7 @@ def getTicketList():
     while True:
         # Add 1 to x each loop for page increment
         x = x + 1
+        x = 0
         toAppend = backend.fetchTicketList(x, fromDate, untilDate)
         if len(toAppend) == 0:
             break
