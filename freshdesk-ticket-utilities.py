@@ -16,6 +16,7 @@ ticketList = []
 filteredView = []
 statusDict = {0: "", 1: "open", 2: "pending", 3: "resolved", 4: "closed"}
 companyDict = {}
+requestsSent = 0
 
 # Button commands
 def reloadBtnClick():
@@ -23,19 +24,19 @@ def reloadBtnClick():
     # Since the function returns a tuple we can assign them to an equivelant
     # quantity of variables directly
     btn_reloadlist.config(state="disabled")
-    btn_refreshlist.config(state="disabled")
+    #btn_refreshlist.config(state="disabled")
     chk_confirm.config(state="disabled")
     btn_bulkclose.config(state="disabled")
     confirmBulkCloseVar.set(False)
     fromDates, untilDates = constructDateRanges()
     getTicketList(fromDates, untilDates)
     btn_reloadlist.config(state="normal")
-    btn_refreshlist.config(state="normal")
+    #btn_refreshlist.config(state="normal")
 
 def getTicketList(fromDates=[date.today()-timedelta(days=30)], untilDates=[date.today()]):
     """Fetches tickets from backend and appends them to global ticketList variable.\n
     Fetches the past 30 days by default."""
-    global ticketList
+    global ticketList, requestsSent
     ticketList = []
     for x in range(len(fromDates)):
         fromDate = fromDates[x]
@@ -45,6 +46,7 @@ def getTicketList(fromDates=[date.today()-timedelta(days=30)], untilDates=[date.
             # Add 1 to y each loop for page increment
             y = y + 1
             toAppend = backend.fetchTicketList(y, fromDate, untilDate)
+            requestsSent = requestsSent + 1
             if len(toAppend) == 0:
                 break
             for item in toAppend:
@@ -146,11 +148,13 @@ def refreshView():
 
 def bulkClose():
     """Closes all tickets in the filtered view."""
+    global requestsSent
     successful = 0
     failed = 0
     for item in filteredView:
         if backend.closeTicket(item.id):
             successful = successful + 1
+            requestsSent = requestsSent + 1
         else:
             failed = failed + 1
     if failed > 0:
@@ -168,9 +172,10 @@ def confirmBulkClose():
 
 def getTicket():
     """Fetches a ticket by its ID and displays details about it."""
-    global loadedTicket
+    global loadedTicket, requestsSent
     try:
         loadedTicket = backend.fetchTicket(int(ticketidVar.get()))
+        requestsSent = requestsSent + 1
     except ValueError:
         return messagebox.showerror("Error", "Ticket ID is not a number")
     if loadedTicket.status != "closed":
@@ -178,6 +183,7 @@ def getTicket():
     else:
         btn_closeticket.config(state="disabled")
     agent = backend.fetchAgent(loadedTicket.responder_id)
+    requestsSent = requestsSent + 1
     try:
         companyname = loadedTicket.company['name']
         companyid = loadedTicket.company['id']
@@ -210,7 +216,9 @@ def getTicket():
 
 def closeTicket():
     """Closes the currently loaded ticket."""
+    global requestsSent
     if backend.closeTicket(loadedTicket.id):
+        requestsSent = requestsSent + 1
         btn_closeticket.config(state="disabled")
         ticketidVar.set(loadedTicket.id)
         getTicket()
@@ -316,6 +324,7 @@ trv_ticketlist.bind("<Double-Button-1>", selectTicket)
 # Get companies
 try:
     companies = backend.fetchCompanies()
+    requestsSent = requestsSent + 1
     for company in companies:
         companyDict[company.id] = company.name
 except:
