@@ -2,6 +2,7 @@
 # Modules
 from datetime import date, timedelta
 import re
+import threading
 # Tkinter toolkits
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -21,22 +22,28 @@ requestsSent = 0
 # Button commands
 def reloadBtnClick():
     """Called when the reload button is clicked."""
+    t = threading.Thread(target=reloadBtnAction)
+    t.setDaemon(True)
+    t.start()
+
+def reloadBtnAction():
+    """The actions themselves for reloadBtnClick() function."""
     # Since the function returns a tuple we can assign them to an equivelant
     # quantity of variables directly
     btn_reloadlist.config(state="disabled")
-    #btn_refreshlist.config(state="disabled")
+    btn_refreshlist.config(state="disabled")
     chk_confirm.config(state="disabled")
     btn_bulkclose.config(state="disabled")
     confirmBulkCloseVar.set(False)
     fromDates, untilDates = constructDateRanges()
     getTicketList(fromDates, untilDates)
     btn_reloadlist.config(state="normal")
-    #btn_refreshlist.config(state="normal")
+    btn_refreshlist.config(state="normal")
 
 def getTicketList(fromDates=[date.today()-timedelta(days=30)], untilDates=[date.today()]):
     """Fetches tickets from backend and appends them to global ticketList variable.\n
     Fetches the past 30 days by default."""
-    global ticketList, requestsSent
+    global ticketList
     ticketList = []
     for x in range(len(fromDates)):
         fromDate = fromDates[x]
@@ -46,13 +53,12 @@ def getTicketList(fromDates=[date.today()-timedelta(days=30)], untilDates=[date.
             # Add 1 to y each loop for page increment
             y = y + 1
             toAppend = backend.fetchTicketList(y, fromDate, untilDate)
-            requestsSent = requestsSent + 1
+            incrementRequestsSentCount()
             if len(toAppend) == 0:
                 break
             for item in toAppend:
                 ticketList.append(item)
     filterView()
-    refreshView()
 
 def constructDateRanges():
     """Constructs 2 lists containing the given date range split into chunks starting from fromDate and ending at untilDate.\n
@@ -124,6 +130,7 @@ def filterView():
                 filteredView.append(item)
     else:
         filteredView = ticketList
+    refreshView()
 
 def refreshView():
     """Rebuilds the view in treeview."""
@@ -148,15 +155,14 @@ def refreshView():
 
 def bulkClose():
     """Closes all tickets in the filtered view."""
-    global requestsSent
     successful = 0
     failed = 0
     for item in filteredView:
         if backend.closeTicket(item.id):
             successful = successful + 1
-            requestsSent = requestsSent + 1
         else:
             failed = failed + 1
+        incrementRequestsSentCount()
     if failed > 0:
         return messagebox.showwarning("Tickets closed", f"Successfully closed {successful} ticket(s)\nFailed to close {failed} ticket(s)\nTotal: {successful+failed}")
     else:
@@ -172,18 +178,19 @@ def confirmBulkClose():
 
 def getTicket():
     """Fetches a ticket by its ID and displays details about it."""
-    global loadedTicket, requestsSent
+    global loadedTicket
     try:
         loadedTicket = backend.fetchTicket(int(ticketidVar.get()))
-        requestsSent = requestsSent + 1
     except ValueError:
+        incrementRequestsSentCount()
         return messagebox.showerror("Error", "Ticket ID is not a number")
+    incrementRequestsSentCount()
     if loadedTicket.status != "closed":
         btn_closeticket.config(state="normal")
     else:
         btn_closeticket.config(state="disabled")
     agent = backend.fetchAgent(loadedTicket.responder_id)
-    requestsSent = requestsSent + 1
+    incrementRequestsSentCount()
     try:
         companyname = loadedTicket.company['name']
         companyid = loadedTicket.company['id']
@@ -216,14 +223,13 @@ def getTicket():
 
 def closeTicket():
     """Closes the currently loaded ticket."""
-    global requestsSent
     if backend.closeTicket(loadedTicket.id):
-        requestsSent = requestsSent + 1
         btn_closeticket.config(state="disabled")
         ticketidVar.set(loadedTicket.id)
         getTicket()
     else:
         messagebox.showerror("Problem with closing ticket", "An error has occurred while attempting to close ticket")
+    incrementRequestsSentCount()
 
 # Create GUI
 win_main = tk.Tk()
@@ -254,6 +260,9 @@ chk_confirm = ttk.Checkbutton(frm_ticketlist, state='disabled', text='Are you su
 chk_confirm.place(x=160, y=47)
 lbl_ticketcount = ttk.Label(frm_ticketlist, text="Total: ")
 lbl_ticketcount.place(x=300, y=60)
+requestsSentVar = tk.StringVar()
+lbl_requestssentcount = ttk.Label(frm_ticketlist, text="Requests sent: 0", textvariable=requestsSentVar)
+lbl_requestssentcount.place(x=400, y=60)
 btn_refreshlist = ttk.Button(frm_ticketlist, text='Refresh', command=filterView, width=7)
 btn_refreshlist.place(x=535, y=45)
 btn_reloadlist = ttk.Button(frm_ticketlist, text='Reload', command=reloadBtnClick, width=7)
@@ -319,12 +328,18 @@ def selectTicket(e):
     ticketidVar.set(selectedTicket)
     getTicket()
 
+def incrementRequestsSentCount():
+    """Increments requestsSent by 1 and updates counter display."""
+    global requestsSent
+    requestsSent = requestsSent + 1
+    requestsSentVar.set("Requests sent: " + str(requestsSent))
+
 trv_ticketlist.bind("<Double-Button-1>", selectTicket)
 
 # Get companies
 try:
     companies = backend.fetchCompanies()
-    requestsSent = requestsSent + 1
+    incrementRequestsSentCount()
     for company in companies:
         companyDict[company.id] = company.name
 except:
