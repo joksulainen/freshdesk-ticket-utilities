@@ -14,24 +14,24 @@ except:
 tokenContents = None
 
 
-# Returns a list of tickets in specified date range
 def fetchTicketList(page, fromDate, untilDate):
+    """Returns a list of tickets in specified date range."""
     return desk.tickets.filter_tickets(page=page, query=f"created_at:>'{fromDate}'%20AND%20created_at:<'{untilDate}'")
 
-# Returns ticket object
 def fetchTicket(ticketid):
+    """Returns ticket object."""
     return desk.tickets.get_ticket(ticketid, "stats", "requester", "company")
 
-# Returns agent object
 def fetchAgent(agentid):
+    """Returns agent object."""
     return desk.agents.get_agent(agentid)
 
-# Returns list of companies
 def fetchCompanies():
+    """Returns list of companies."""
     return desk.companies.list_companies()
 
-# Returns True on success
 def closeTicket(ticketid):
+    """Returns True on success."""
     try:
         desk.tickets.update_ticket(ticketid, status=5)
         return True
