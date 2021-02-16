@@ -169,6 +169,7 @@ def bulkClose():
         return messagebox.showinfo("Tickets closed", f"Successfully closed {successful} ticket(s)")
     btn_bulkclose.config(state="disabled")
     confirmBulkCloseVar.set(False)
+    reloadBtnClick()
 
 def confirmBulkClose():
     if confirmBulkCloseVar.get():
